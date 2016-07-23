@@ -13,6 +13,7 @@ var locationTable=db.getlocationdef;
 var healthTable=db.gethealthdef;
 require('net').createServer(function (socket) {
         socket.on('data', function (data) {
+            log.info(data);
             var data_object_health={};
             var data_object_location={};
             var data_array=data.split("**");
