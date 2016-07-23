@@ -21,7 +21,8 @@ require('net').createServer(function (socket) {
             data_object_health.device_id=data_array[0];
             data_object_location.device_id=data_array[0];
             var gprmc=nmea.parse(data_array[1]);
-            if(data.valid){
+            if(gprmc.valid){
+                log.info()
                 data_object_location.location=gprmc.loc.geojson.coordinates;
             locationTable.find({device_id:data_object_health.device_id},"location").sort({_id:-1}).limit(1)
                 .exec(function(err,row){
