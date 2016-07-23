@@ -14,10 +14,10 @@ var healthTable=db.gethealthdef;
 require('net').createServer(function (socket) {
     log.info('connected');
         socket.on('data', function (data) {
-            log.info(data.toString());
             var data_object_health={};
             var data_object_location={};
-            var data_array=data.toString().split("**");
+            var data_array=data.toString().split("AT+QISEND=200")[0].split("**");
+            log.info(data.toString().split("AT+QISEND=200")[0]);
             data_object_health.device_id=data_array[0];
             data_object_location.device_id=data_array[0];
             var gprmc=nmea.parse(data_array[1]);
