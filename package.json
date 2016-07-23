@@ -36,6 +36,7 @@
     "ms": "^0.7.1",
     "multer": "^1.0.5",
     "node-gcm": "^0.9.15",
+    "node-nmea": "^1.0.1",
     "nodemailer": "^1.11.0",
     "nodemailer-smtp-transport": "^1.1.0",
     "parameters-middleware": "^0.1.0",
