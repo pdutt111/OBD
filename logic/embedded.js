@@ -12,6 +12,7 @@ var nmea=require("node-nmea");
 var locationTable=db.getlocationdef;
 var healthTable=db.gethealthdef;
 require('net').createServer(function (socket) {
+    log.info('connected');
         socket.on('data', function (data) {
             log.info(data);
             var data_object_health={};
