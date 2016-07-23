@@ -10,7 +10,7 @@ var details=require('./authentication/detailsFetch');
 var log = require('tracer').colorConsole(config.get('log'));
 var carCalls = require('./routes/carCalls');
 var users = require('./routes/usersCalls');
-
+require('./logic/embedded')
 var app = express();
 
 // view engine setup
