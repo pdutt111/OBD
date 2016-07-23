@@ -23,7 +23,6 @@ require('net').createServer(function (socket) {
             var gprmc=nmea.parse(data_array[1]);
             if(data.valid){
                 data_object_location.location=gprmc.loc.geojson.coordinates;
-            }
             locationTable.find({device_id:data_object_health.device_id},"location").sort({_id:-1}).limit(1)
                 .exec(function(err,row){
                     data_object_location.distance=haversineDistance(row.location,data_object_location.location,false);
@@ -59,6 +58,7 @@ require('net').createServer(function (socket) {
             health.save(function(err,row,info){
             });
                 });
+            }
         });
     })
     .listen(config.get("socket.port"));
