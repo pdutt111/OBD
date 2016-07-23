@@ -20,7 +20,11 @@ require('net').createServer(function (socket) {
             log.info(data.toString().split("AT+QISEND=200")[0]);
             data_object_health.device_id=data_array[0];
             data_object_location.device_id=data_array[0];
-            var gprmc=nmea.parse(data_array[1]);
+            if(data_array[1].indexOf("$")>-1){
+                var gprmc=nmea.parse(data_array[1]);
+            }else{
+                var gprmc=nmea.parse("$"+data_array[1]);
+            }
             if(gprmc.valid){
                 log.info(gprmc);
                 data_object_location.location=gprmc.loc.geojson.coordinates;
