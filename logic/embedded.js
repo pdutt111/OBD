@@ -25,15 +25,17 @@ require('net').createServer(function (socket) {
             }else{
                 var gprmc=nmea.parse("$"+data_array[1]);
             }
-            if(gprmc.valid) {
-                log.info(gprmc);
-                data_object_location.location = gprmc.loc.geojson.coordinates;
+
                 locationTable.find({device_id: data_object_health.device_id}, "location").sort({_id: -1}).limit(1)
                     .exec(function (err, row) {
-                        if (row && row.location) {
-                            data_object_location.distance = haversineDistance(row.location, data_object_location.location, false);
-                        }else{
-                            data_object_location.distance = 0;
+                        if(gprmc.valid) {
+                            log.info(gprmc);
+                            data_object_location.location = gprmc.loc.geojson.coordinates;
+                            if (row && row.location) {
+                                data_object_location.distance = haversineDistance(row.location, data_object_location.location, false);
+                            } else {
+                                data_object_location.distance = 0;
+                            }
                         }
                             data_object_health.voltage = data_array[2];
                             if (data_array[3].slice(0, 1) == "41") {
@@ -67,7 +69,6 @@ require('net').createServer(function (socket) {
                             health.save(function (err, row, info) {
                             });
                     });
-            }
         });
     })
     .listen(config.get("socket.port"));
