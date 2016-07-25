@@ -56,7 +56,7 @@ var listings={
     },
     getCarHealth:function(req){
         var def= q.defer();
-        healthTable.findOne({"$query":{device_id:req.query.device_id},"$orderby":{_id:-1}},function(err,health){
+        healthTable.findOne({"$query":{device_id:req.query.device_id,"engine_rpm":{$exists:true}},"$orderby":{_id:-1}},function(err,health){
             if(!err){
                 def.resolve(health);
             }else{
