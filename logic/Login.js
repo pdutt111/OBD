@@ -187,7 +187,7 @@ var users={
     },
     updateUserProfile:function(req,res){
         var def= q.defer();
-        if(req.user.is_verified){
+        //if(req.user.is_verified){
             for(var key in req.body){
                 if(key!="name"&&key!="email"&&key!="profession"&&key!="address"){
                     delete req.body[key];
@@ -207,9 +207,9 @@ var users={
                     log.warn(err);
                     def.reject({status: 500, message: config.get('error.dberror')});
                 })
-        }else{
-            def.reject({status: 401, message: config.get('error.unauthorized')});
-        }
+        //}else{
+        //    def.reject({status: 401, message: config.get('error.unauthorized')});
+        //}
         return def.promise;
     },
     insertDevice:function(req,res){
