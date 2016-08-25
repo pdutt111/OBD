@@ -14,21 +14,22 @@ var healthTable=db.gethealthdef;
 require('net').createServer(function (socket) {
     log.info('connected');
         socket.on('data', function (data) {
-            var data_object_health={};
-            var data_object_location={};
-            var data_array=data.toString().split("AT+QISEND=200")[0].split("**");
-            log.info(data.toString().split("AT+QISEND=200")[0]);
-            data_object_health.device_id=data_array[0];
-            data_object_location.device_id=data_array[0];
-            if(data_array[1].indexOf("$")>-1){
-                var gprmc=nmea.parse(data_array[1]);
-            }else{
-                var gprmc=nmea.parse("$"+data_array[1]);
-            }
+            try {
+                var data_object_health = {};
+                var data_object_location = {};
+                var data_array = data.toString().split("AT+QISEND=200")[0].split("**");
+                log.info(data.toString().split("AT+QISEND=200")[0]);
+                data_object_health.device_id = data_array[0];
+                data_object_location.device_id = data_array[0];
+                if (data_array[1].indexOf("$") > -1) {
+                    var gprmc = nmea.parse(data_array[1]);
+                } else {
+                    var gprmc = nmea.parse("$" + data_array[1]);
+                }
 
                 locationTable.find({device_id: data_object_health.device_id}, "location").sort({_id: -1}).limit(1)
                     .exec(function (err, row) {
-                        if(gprmc.valid) {
+                        if (gprmc.valid) {
                             log.info(gprmc);
                             data_object_location.location = gprmc.loc.geojson.coordinates;
                             if (row && row.location) {
@@ -37,9 +38,9 @@ require('net').createServer(function (socket) {
                                 data_object_location.distance = 0;
                             }
                         }
-                            data_object_health.voltage = data_array[2];
+                        data_object_health.voltage = data_array[2];
                         if (data_array[3].slice(0, 2) == "41") {
-                            log.info("coolant_temp",data_array[3].slice(4, 6))
+                            log.info("coolant_temp", data_array[3].slice(4, 6))
                             data_object_health.coolant_temp = (Number(parseInt(data_array[3].slice(4, 6), 16)) - 40);//410582
                         }
                         if (data_array[4].slice(0, 2) == "41") {
@@ -47,7 +48,7 @@ require('net').createServer(function (socket) {
                             data_object_health.vehicle_speed_sensor = Number(parseInt(data_array[4].slice(4, 6), 16));//410D01
                             data_object_location.speed = Number(data_array[4].slice(4, 5));//410D01
                         }
-                        if (data_array[5].slice(0, 2) == "41"){
+                        if (data_array[5].slice(0, 2) == "41") {
                             data_object_health.engine_rpm = ((256 * Number(parseInt(data_array[5].slice(4, 6), 16)) + Number(parseInt(data_array[5].slice(6, 8), 16)) / 4));//410C13DC
                         }
                         if (data_array[6].slice(0, 2) == "41")
@@ -66,12 +67,13 @@ require('net').createServer(function (socket) {
                             data_object_health.engine_fuel_rate = ((256 * Number(parseInt(data_array[5].slice(4, 6), 16)) + Number(parseInt(data_array[5].slice(6, 8), 16))) / 120);
 
                         var location = new locationTable(data_object_location);
-                            location.save(function (err, row, info) {
-                            });
-                            var health = new healthTable(data_object_health);
-                            health.save(function (err, row, info) {
-                            });
+                        location.save(function (err, row, info) {
+                        });
+                        var health = new healthTable(data_object_health);
+                        health.save(function (err, row, info) {
+                        });
                     });
+            }catch(e){}
         });
     })
     .listen(config.get("socket.port"));
