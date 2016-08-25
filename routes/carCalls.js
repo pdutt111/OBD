@@ -148,7 +148,26 @@ router.post('/protected/car/trip/end',params({body:['device_id']},{message : con
                 res.status(err.status).json(err.message);
             })
     });
-
+router.post('/car/location',params({body:['device_id','speed','location',]},{message : config.get('error.badrequest')}),
+    function(req,res,next){
+        carLogic.postLocation(req)
+            .then(function(info){
+                res.json(info);
+            })
+            .catch(function(err){
+                res.status(err.status).json(err.message);
+            })
+    });
+router.post('/car/health',params({body:['device_id','speed','location',]},{message : config.get('error.badrequest')}),
+    function(req,res,next){
+        carLogic.postLocation(req)
+            .then(function(info){
+                res.json(info);
+            })
+            .catch(function(err){
+                res.status(err.status).json(err.message);
+            })
+    });
 
 
 module.exports = router;

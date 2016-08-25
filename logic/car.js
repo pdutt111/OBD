@@ -200,6 +200,30 @@ var listings={
             }
         });
         return def.promise;
+    },
+    postLocation:function(req){
+        var def= q.defer();
+        var location=new locationTable(req.body);
+        location.save(function(err,row,info){
+           if(!err){
+               def.resolve(config.get('ok'));
+           }else{
+               def.reject({status:500,message:config.get('error.dberror')});
+           }
+        });
+        return def.promise
+    },
+    postHealth:function(req){
+        var def= q.defer();
+        var health=new healthTable(req.body);
+        health.save(function(err,row,info){
+            if(!err){
+                def.resolve(config.get('ok'));
+            }else{
+                def.reject({status:500,message:config.get('error.dberror')});
+            }
+        });
+        return def.promise;
     }
 };
 module.exports=listings;

@@ -16,16 +16,16 @@ var auth=function(req,res,next){
                 try {
                     var decoded = crypto.decryptObject(jwt.decode(token, config.get('jwtsecret')).data);
                     var now = (new Date()).toISOString();
-                    if ((now < decoded.exp)) {
+                    //if ((now < decoded.exp)) {
                         def.resolve(decoded.user);
-                    }else{
-                        if(req.originalUrl.indexOf("/protected/info/renew")>-1){
-                            def.resolve(decoded.user);
-                        }
-                        else {
-                            def.reject({status:401,message:config.get('error.webtoken.expired')});
-                        }
-                    }
+                    //}else{
+                    //    if(req.originalUrl.indexOf("/protected/info/renew")>-1){
+                    //        def.resolve(decoded.user);
+                    //    }
+                    //    else {
+                    //        def.reject({status:401,message:config.get('error.webtoken.expired')});
+                    //    }
+                    //}
                 } catch (err) {
                     def.reject({status:401,message:config.get('error.webtoken.unknown')})
                 }
